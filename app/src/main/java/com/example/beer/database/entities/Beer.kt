@@ -26,8 +26,8 @@ data class Beer(
     val name: String,
     val producer: String,
     val alcoholPercentage: Double,
-    val type: BeerType,
-    val image: ByteArray?, // Store image as blob
+    val type: String,
+    val imageURI: String?, //best Practise. Save images in private folder and only store the URI in the database.
     val price: Double,
     val note: String?,
     val ratingId: Int?,
