@@ -14,8 +14,8 @@ interface BeerDao {
     @Delete
     suspend fun deleteBeer(beer: Beer)
 
-    @Query("SELECT * FROM beers")
-    suspend fun getAllBeers(): List<Beer>
+    @Query("SELECT * FROM beers ORDER BY name")
+    fun getAllBeers(): List<Beer>
 
     @Transaction
     @Query("SELECT * FROM beers WHERE id = :id")

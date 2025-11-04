@@ -1,6 +1,7 @@
 package com.example.beer.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -28,13 +29,33 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "beer_database"
-                ).build()
-                INSTANCE = instance
-                instance
+                try {
+                    val instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        AppDatabase::class.java,
+                        "app.db"
+                    )
+                        .createFromAsset("seed.db")
+                        .fallbackToDestructiveMigration(false)
+                        .build()
+
+                    INSTANCE = instance
+                    instance
+                } catch (e: Exception) {
+                    Log.e("AppDatabase", "Fehler beim Initialisieren der Datenbank", e)
+
+                    // Fallback auf leere In-Memory-DB, damit App weiterläuft
+                    Room.inMemoryDatabaseBuilder(
+                        context.applicationContext,
+                        AppDatabase::class.java
+                    )
+                        .allowMainThreadQueries()
+                        .build()
+                        .also {
+                            Log.w("AppDatabase", "Fallback auf In-Memory-DB aktiviert!")
+                            INSTANCE = it
+                        }
+                }
             }
         }
     }
