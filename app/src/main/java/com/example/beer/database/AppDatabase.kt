@@ -37,7 +37,7 @@ abstract class AppDatabase : RoomDatabase() {
                     )
                         .createFromAsset("seed.db")
                         .fallbackToDestructiveMigration(false)
-                        .allowMainThreadQueries() //TODO: Wieder entfernen
+                        //.allowMainThreadQueries() //TODO: Wieder entfernen
                         .build()
 
                     INSTANCE = instance
