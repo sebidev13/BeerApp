@@ -17,7 +17,8 @@ enum class BeerCategory(val displayName: String) {
     ALE("Ale Styles (Top-Fermented)"),
     LAGER("Lager Styles (Bottom-Fermented)"),
     WILD("Wild/Spontaneously Fermented"),
-    HYBRID("Hybrid/Specialty Styles");
+    HYBRID("Hybrid/Specialty Styles"),
+    UNKNOWN("unknown");
 }
 
 
@@ -102,7 +103,9 @@ enum class BeerType(val styleName: String, val category: BeerCategory) {
     HISTORICAL_BEER("Historical Beer", BeerCategory.HYBRID),
     MALT_LIQUOR("Malt Liquor", BeerCategory.HYBRID),
     SMOKED_BEER("Smoked Beer (in general)", BeerCategory.HYBRID),
-    SPECIALTY_BEER("Specialty Beer", BeerCategory.HYBRID);
+    SPECIALTY_BEER("Specialty Beer", BeerCategory.HYBRID),
+    UNKNOWN("unknown", BeerCategory.UNKNOWN);
+
 
     // Helper method to provide a more readable output than the constant name
     override fun toString(): String = styleName
