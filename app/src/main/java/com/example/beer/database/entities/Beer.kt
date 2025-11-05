@@ -2,6 +2,7 @@ package com.example.beer.database.entities
 
 import androidx.room.*
 import java.io.Serializable
+import kotlinx.serialization.Serializable as KxSerializable
 
 
 
@@ -11,6 +12,7 @@ import java.io.Serializable
  * Defines the high-level fermentation and origin categories for beer styles.
  * This is used to organize the BeerStyle enum.
  */
+@KxSerializable
 enum class BeerCategory(val displayName: String) {
     ALE("Ale Styles (Top-Fermented)"),
     LAGER("Lager Styles (Bottom-Fermented)"),
@@ -23,6 +25,7 @@ enum class BeerCategory(val displayName: String) {
  * Lists a comprehensive set of beer styles, now categorized for easier filtering.
  * Each constant holds its descriptive name and its primary category.
  */
+@KxSerializable
 enum class BeerType(val styleName: String, val category: BeerCategory) {
     // --- Ale Styles (Top-Fermented) ---
     ALTBIER("Altbier", BeerCategory.ALE),
@@ -105,25 +108,25 @@ enum class BeerType(val styleName: String, val category: BeerCategory) {
     override fun toString(): String = styleName
 }
 
+
 @Entity(
     tableName = "beers",
+    indices = [Index("ratingId"), Index("tasteId")],
     foreignKeys = [
         ForeignKey(
             entity = Rating::class,
-            parentColumns = ["ratingId"],
+            parentColumns = ["id"],
             childColumns = ["ratingId"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = Taste::class,
-            parentColumns = ["tasteId"],
+            parentColumns = ["id"],
             childColumns = ["tasteId"],
             onDelete = ForeignKey.CASCADE
         )
-    ],
-    indices = [Index(value = ["ratingId"]), Index(value = ["tasteId"])]
+    ]
 )
-
 data class Beer(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,

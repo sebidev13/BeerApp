@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.20"
     id("com.google.devtools.ksp") version "2.0.21-1.0.25"
 }
 
@@ -53,6 +54,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
 
     val roomVersion = "2.8.3" // latest as of 2025
 
@@ -60,4 +63,7 @@ dependencies {
     // Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+}
+kotlin {
+    sourceSets.all { languageSettings.optIn("kotlinx.serialization.ExperimentalSerializationApi") }
 }

@@ -42,10 +42,10 @@ enum class Aftertaste(val description: String) {
 
 @Entity(tableName = "tastes")
 data class Taste(
-    @PrimaryKey(autoGenerate = true) val tasteId: Int = 0,
-    val sweetness: Sweetness,
-    val bitterness: Bitterness,
-    val mouthfeel: Mouthfeel,
-    val aftertaste: Aftertaste,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val sweetness: Sweetness?,
+    val bitterness: Bitterness?,
+    val mouthfeel: Mouthfeel?,
+    val aftertaste: Aftertaste?,
     val note: String?
 )
