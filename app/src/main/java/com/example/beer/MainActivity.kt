@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         val db = AppDatabase.getDatabase(applicationContext)
 
         // Test DB Share (Einfach folgendes auskommentieren)
-        /*val beerDao = db.beerDao()
+        val beerDao = db.beerDao()
 
         // 2) Exporter initialisieren
         exporter = BeerExporter(applicationContext, beerDao)
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity,
                         "Export fehlgeschlagen: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
                 }
-        }*/
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
