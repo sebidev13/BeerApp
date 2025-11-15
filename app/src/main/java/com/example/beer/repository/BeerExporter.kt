@@ -2,8 +2,8 @@ package com.example.beer.repository
 
 import android.content.Context
 import androidx.core.content.FileProvider
-import com.example.beer.database.dao.BeerDao
-import com.example.beer.database.dto.toExport
+import com.example.beer.data.dao.BeerDao
+import com.example.beer.data.dto.toExport
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File

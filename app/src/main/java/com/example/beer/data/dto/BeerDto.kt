@@ -1,0 +1,24 @@
+package com.example.beer.data.dto
+
+import com.example.beer.data.enums.BeerType
+import com.example.beer.data.model.BeerModel
+import kotlinx.serialization.Serializable as KxSerializable
+
+@KxSerializable
+data class BeerDto(
+    val name: String,
+    val producer: String,
+    val alcoholPercentage: Double,
+    val type: BeerType,
+    val price: Double,
+    val note: String?
+)
+
+fun BeerModel.toExport(): BeerDto = BeerDto(
+    name = name,
+    producer = producer,
+    alcoholPercentage = alcoholPercentage,
+    type = type,
+    price = price,
+    note = note
+)
