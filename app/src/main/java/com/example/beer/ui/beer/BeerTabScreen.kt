@@ -1,4 +1,4 @@
-package com.example.beer.ui.Beer
+package com.example.beer.ui.beer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.beer.ui.Beer.BeerTabViewModel
 
 @Composable
 fun BeerTabScreen(viewModel: BeerTabViewModel) {

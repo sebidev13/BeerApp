@@ -1,4 +1,4 @@
-package com.example.beer.ui.Beer
+package com.example.beer.ui.beer
 
 import androidx.lifecycle.ViewModel
 import com.example.beer.data.model.CalculatorData

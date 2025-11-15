@@ -1,4 +1,4 @@
-package com.example.beer.ui.NavigationBar
+package com.example.beer.ui.navigationbar
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Box
@@ -14,13 +14,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.example.beer.data.TabItem
-import com.example.beer.ui.NavigationBar.TabsViewModel
-import com.example.beer.ui.Beer.BeerTabViewModel
-import com.example.beer.ui.Rating.RatingTabViewModel
-import com.example.beer.ui.Setting.SettingsTabViewModel
-import com.example.beer.ui.Beer.BeerTabScreen
-import com.example.beer.ui.Rating.RatingTabScreen
-import com.example.beer.ui.Setting.SettingsTabScreen
+import com.example.beer.ui.beer.BeerTabViewModel
+import com.example.beer.ui.rating.RatingTabViewModel
+import com.example.beer.ui.setting.SettingsTabViewModel
+import com.example.beer.ui.beer.BeerTabScreen
+import com.example.beer.ui.rating.RatingTabScreen
+import com.example.beer.ui.setting.SettingsTabScreen
 
 @Composable
 fun BottomTabsScreen(tabsViewModel: TabsViewModel, beerTabViewModel: BeerTabViewModel, ratingTabViewModel: RatingTabViewModel, settingsTabViewModel: SettingsTabViewModel) {

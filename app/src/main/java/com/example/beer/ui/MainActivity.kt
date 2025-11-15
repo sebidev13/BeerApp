@@ -4,11 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.beer.ui.Beer.BeerTabViewModel
-import com.example.beer.ui.NavigationBar.BottomTabsScreen
-import com.example.beer.ui.NavigationBar.TabsViewModel
-import com.example.beer.ui.Rating.RatingTabViewModel
-import com.example.beer.ui.Setting.SettingsTabViewModel
+import com.example.beer.ui.beer.BeerTabViewModel
+import com.example.beer.ui.navigationbar.BottomTabsScreen
+import com.example.beer.ui.navigationbar.TabsViewModel
+import com.example.beer.ui.rating.RatingTabViewModel
+import com.example.beer.ui.setting.SettingsTabViewModel
 import com.example.beer.ui.theme.BeerAppTheme
 
 class MainActivity : ComponentActivity() {

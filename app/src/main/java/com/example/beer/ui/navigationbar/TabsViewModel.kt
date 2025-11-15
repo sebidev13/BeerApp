@@ -1,4 +1,4 @@
-package com.example.beer.ui.NavigationBar
+package com.example.beer.ui.navigationbar
 
 import androidx.lifecycle.ViewModel
 import com.example.beer.data.TabItem
