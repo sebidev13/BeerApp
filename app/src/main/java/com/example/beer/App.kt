@@ -16,9 +16,11 @@ import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 @HiltAndroidApp
-class App : Application(){
-    @Inject lateinit var beerRepository: BeerRepository
-    @Inject lateinit var json: Json
+class App : Application() {
+    @Inject
+    lateinit var beerRepository: BeerRepository
+    @Inject
+    lateinit var json: Json
 
     @Inject
     lateinit var database: AppDatabase
@@ -40,12 +42,18 @@ class App : Application(){
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val text = assets.open("seed_beers.json")
-                    .bufferedReader().use { it.readText() }
+                    .bufferedReader()
+                    .use { reader ->
+                        reader.readText()
+                    }
 
                 val dtos = json.decodeFromString<List<BeerDto>>(text)
-                val models : List<BeerModel> = dtos.map { dto -> dto.toModel() }
 
-                beerRepository.addBeers(models)
+                val batchSize = 50
+                dtos.chunked(batchSize).forEach { dtoChunk ->
+                    val models = dtoChunk.map { it.toModel() }
+                    beerRepository.addBeers(models)
+                }
 
                 prefs.edit().putBoolean("beers_seeded", true).apply()
             } catch (e: Exception) {

@@ -7,7 +7,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.example.beer.interfaces.BeerRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -16,7 +18,14 @@ class BeerTabViewModel @Inject constructor(
     private val beerRepository: BeerRepository
 ) : ViewModel() {
 
-    private val _allBeers = MutableStateFlow<List<BeerModel>>(emptyList())
+    val allBeers = beerRepository.getAllBeers()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    /*private val _allBeers = MutableStateFlow<List<BeerModel>>(emptyList())
     val allBeers = _allBeers.asStateFlow()
 
 
@@ -27,5 +36,5 @@ class BeerTabViewModel @Inject constructor(
             }
             _allBeers.value = list
         }
-    }
+    }*/
 }

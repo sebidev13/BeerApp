@@ -24,7 +24,10 @@ class JsonFileManager @Inject constructor(
     }
 
     suspend fun exportBeersJson(): android.net.Uri {
-        val beers = beerDao.getAllBeers().map { it.toExport() }
+        val beers = beerDao.getAllBeers()
+            .first()
+            .map { it.toExport() }
+
         val payload = json.encodeToString(beers)
 
         val outFile = File(context.cacheDir, "beers_export.json")
