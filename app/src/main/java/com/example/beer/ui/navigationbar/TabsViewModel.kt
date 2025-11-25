@@ -1,7 +1,7 @@
 package com.example.beer.ui.navigationbar
 
 import androidx.lifecycle.ViewModel
-import com.example.beer.data.TabItem
+import com.example.beer.data.enums.TabItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

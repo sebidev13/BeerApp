@@ -21,6 +21,10 @@ class BeerRepositoryImpl @Inject constructor(
         beerDao.insertBeer(beer)
     }
 
+    override suspend fun addBeers(beers: List<BeerModel>) {
+        beerDao.insertBeers(beers)
+    }
+
     override suspend fun updateBeer(beer: BeerModel) {
         beerDao.updateBeer(beer)
     }

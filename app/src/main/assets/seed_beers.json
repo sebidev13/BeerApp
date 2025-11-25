@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Test Beer",
+    "producer": "Test Brewery",
+    "alcoholPercentage": 5.0,
+    "type": "LAGER",
+    "price": 1.99,
+    "note": null
+  }
+]

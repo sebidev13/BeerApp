@@ -28,7 +28,7 @@ data class BeerModel(
     val producer: String,
     val alcoholPercentage: Double,
     val type: BeerType,
-    val imageURI: String?, //best Practise. Save images in private folder and only store the URI in the database.
+    val imageURI: String?,
     val price: Double,
     val note: String?,
     val ratingId: Int?,

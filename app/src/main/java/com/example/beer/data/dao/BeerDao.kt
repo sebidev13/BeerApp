@@ -21,4 +21,7 @@ interface BeerDao {
     @Transaction
     @Query("SELECT * FROM beers WHERE id = :id")
     suspend fun getBeerById(id: Int): BeerModel?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertBeers(beers: List<BeerModel>)
 }

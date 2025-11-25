@@ -1,4 +1,4 @@
-package com.example.beer.data
+package com.example.beer.data.enums
 
 enum class TabItem(val title: String) {
     Beer("Beer"),

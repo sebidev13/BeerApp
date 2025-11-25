@@ -22,3 +22,17 @@ fun BeerModel.toExport(): BeerDto = BeerDto(
     price = price,
     note = note
 )
+
+fun BeerDto.toModel(): BeerModel =
+    BeerModel(
+        id = 0,
+        name = name,
+        producer = producer,
+        alcoholPercentage = alcoholPercentage,
+        type = type,
+        imageURI = null,
+        price = price,
+        note = note,
+        ratingId = null,
+        tasteId = null
+    )

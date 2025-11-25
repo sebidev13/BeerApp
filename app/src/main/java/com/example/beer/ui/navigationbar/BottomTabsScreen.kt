@@ -12,7 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.beer.data.TabItem
+import com.example.beer.data.enums.TabItem
 import com.example.beer.ui.beer.BeerTabViewModel
 import com.example.beer.ui.rating.RatingTabViewModel
 import com.example.beer.ui.setting.SettingsTabViewModel
