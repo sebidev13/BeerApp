@@ -16,63 +16,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 
 @Composable
 fun BeerTabScreen(viewModel: BeerTabViewModel) {
-    var number1 by remember { mutableStateOf("") }
-    var number2 by remember { mutableStateOf("") }
-
-    // State aus dem ViewModel (automatisch recomposed bei Änderungen)
-    val result by viewModel.result.collectAsState(initial = null)
-    val history by viewModel.history.collectAsState()
+    val beers by viewModel.allBeers.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.Top
     ) {
-        OutlinedTextField(
-            value = number1,
-            onValueChange = {
-                number1 = it
-                viewModel.calculate(
-                    number1.toIntOrNull(),
-                    number2.toIntOrNull()
+
+        Text("Beers:", modifier = Modifier.padding(bottom = 8.dp))
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(beers) { beer ->
+                Text(
+                    text = beer.name,
+                    modifier = Modifier.padding(8.dp)
                 )
-            },
-            label = { Text("Zahl 1") },
-            singleLine = true
-        )
-
-        OutlinedTextField(
-            value = number2,
-            onValueChange = {
-                number2 = it
-                viewModel.calculate(
-                    number1.toIntOrNull(),
-                    number2.toIntOrNull()
-                )
-            },
-            label = { Text("Zahl 2") },
-            singleLine = true
-        )
-
-        Text(
-            text = result?.let { "Summe: ${it.sum}" } ?: "Bitte Zahlen eingeben",
-            modifier = Modifier.padding(top = 16.dp)
-        )
-
-        if (history.isEmpty()) {
-            Text("Keine Berechnungen vorhanden", modifier = Modifier.padding(16.dp))
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(history) { data ->
-                    Text("${data.num1} + ${data.num2} = ${data.sum}")
-                }
             }
         }
     }

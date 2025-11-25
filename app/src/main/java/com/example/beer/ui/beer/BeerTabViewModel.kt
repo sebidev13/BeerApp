@@ -1,32 +1,31 @@
 package com.example.beer.ui.beer
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.beer.data.model.BeerModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import com.example.beer.data.model.CalculatorData
+import com.example.beer.interfaces.BeerRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @HiltViewModel
-class BeerTabViewModel @Inject constructor() : ViewModel() {
+class BeerTabViewModel @Inject constructor(
+    private val beerRepository: BeerRepository
+) : ViewModel() {
 
-    private val _result = MutableStateFlow<CalculatorData?>(null)
-    val result = _result.asStateFlow()
+    private val _allBeers = MutableStateFlow<List<BeerModel>>(emptyList())
+    val allBeers = _allBeers.asStateFlow()
 
-    private val _history = MutableStateFlow<List<CalculatorData>>(emptyList())
-    val history = _history.asStateFlow()
 
-    fun calculateSum(num1: Int, num2: Int) {
-        _result.value = CalculatorData(num1, num2, num1 + num2)
-    }
-
-    fun calculate(num1: Int?, num2: Int?) {
-        if (num1 != null && num2 != null) {
-            val data = CalculatorData(num1, num2, num1 + num2)
-            _result.value = data
-            _history.value = history.value + data
-        } else {
-            _result.value = null
+    init {
+        viewModelScope.launch {
+            val list = withContext(kotlinx.coroutines.Dispatchers.IO) {
+                beerRepository.getAllBeers()
+            }
+            _allBeers.value = list
         }
     }
 }
