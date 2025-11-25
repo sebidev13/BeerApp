@@ -11,4 +11,13 @@ interface RatingDao {
 
     @Query("SELECT * FROM ratings")
     suspend fun getAllRatings(): List<RatingModel>
+
+    @Query("SELECT * FROM ratings WHERE id = :id")
+    suspend fun getRatingById(id: Int): RatingModel?
+
+    @Update
+    suspend fun updateRating(rating: RatingModel)
+
+    @Delete
+    suspend fun deleteRating(rating: RatingModel)
 }

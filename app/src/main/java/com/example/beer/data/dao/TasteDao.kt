@@ -10,4 +10,13 @@ interface TasteDao {
 
     @Query("SELECT * FROM tastes")
     suspend fun getAllTastes(): List<TasteModel>
+
+    @Query("SELECT * FROM tastes WHERE id = :id")
+    suspend fun getTasteById(id: Int): TasteModel?
+
+    @Update
+    suspend fun updateTaste(taste: TasteModel)
+
+    @Delete
+    suspend fun deleteTaste(taste: TasteModel)
 }
