@@ -2,6 +2,7 @@ package com.example.beer.data.dao
 
 import androidx.room.*
 import com.example.beer.data.model.BeerModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BeerDao {
@@ -15,7 +16,7 @@ interface BeerDao {
     suspend fun deleteBeer(beer: BeerModel)
 
     @Query("SELECT * FROM beers ORDER BY name")
-    fun getAllBeers(): List<BeerModel>
+    fun getAllBeers(): Flow<List<BeerModel>>
 
     @Transaction
     @Query("SELECT * FROM beers WHERE id = :id")

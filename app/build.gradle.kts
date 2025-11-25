@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hilt)
+    kotlin("kapt")
 }
 
 android {
@@ -53,6 +55,13 @@ kotlin {
 }
 
 dependencies {
+
+    // --- Hilt ---
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // Für Compose + Hilt ViewModels
+    implementation(libs.hilt.navigation.compose)
 
     // --- Jetpack Compose BOM (verwaltet die Versionen) ---
     val composeBom = platform("androidx.compose:compose-bom:2025.10.01")

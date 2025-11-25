@@ -2,10 +2,13 @@ package com.example.beer.ui.navigationbar
 
 import androidx.lifecycle.ViewModel
 import com.example.beer.data.TabItem
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class TabsViewModel : ViewModel() {
+@HiltViewModel
+class TabsViewModel @Inject constructor() : ViewModel() {
 
     // aktuell ausgewählter Tab (Index oder Enum)
     private val _selectedTab = MutableStateFlow(TabItem.Beer)
@@ -17,7 +20,7 @@ class TabsViewModel : ViewModel() {
 
     fun selectTab(tab: TabItem) {
         _selectedTab.value = tab
-        //TODO: Inhalte laden (Repository/UseCase) und _content updaten
+
         _content.value = when (tab) {
             TabItem.Beer -> "Bier"
             TabItem.Rating -> "Rating"

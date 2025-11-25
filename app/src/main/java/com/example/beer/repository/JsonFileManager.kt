@@ -4,12 +4,17 @@ import android.content.Context
 import androidx.core.content.FileProvider
 import com.example.beer.data.dao.BeerDao
 import com.example.beer.data.dto.toExport
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 
-class BeerExporter(
-    private val context: Context,
+@Singleton
+class JsonFileManager @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val beerDao: BeerDao
 ) {
     private val json = Json {
@@ -18,19 +23,16 @@ class BeerExporter(
         explicitNulls = false
     }
 
-    /**
-     * Exportiert alle Beers als JSON, gibt eine Content-URI zurück,
-     * die fürs Teilen geeignet ist.
-     */
     suspend fun exportBeersJson(): android.net.Uri {
-        val beers = beerDao.getAllBeers().map { it.toExport() }
+        //val beers = beerDao.getAllBeers().map { it.toExport() }
+        val beers = beerDao.getAllBeers()
+            .first()
+            .map { it.toExport() }
         val payload = json.encodeToString(beers)
 
-        // Datei im Cache
         val outFile = File(context.cacheDir, "beers_export.json")
         outFile.writeText(payload, Charsets.UTF_8)
 
-        // FileProvider → content:// URI
         return FileProvider.getUriForFile(
             context,
             "${context.packageName}.fileprovider",
