@@ -1,6 +1,6 @@
 # BeerTracker – Mobile Beer Rating App
 
-Dieses Projekt wurde im Rahmen des Moduls **Entwicklung mobiler Applikationen** als Teamarbeit entwickelt. Ziel der App ist es, eine persönliche Sammlung von Bieren aufzubauen, die man bereits probiert hat, und diese anhand von Geschmack und Bewertung zu dokumentieren.
+Dieses Projekt wird aktuell im Rahmen des Moduls **Entwicklung mobiler Applikationen** als Teamarbeit entwickelt und befindet sich noch **in progress**. Ziel der App ist es, eine persönliche Sammlung von Bieren aufzubauen, die man bereits probiert hat, und diese anhand von Geschmack und Bewertung zu dokumentieren.
 
 ## 🍺 Zweck der App
 
