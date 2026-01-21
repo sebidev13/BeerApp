@@ -4,6 +4,7 @@ import androidx.room.*
 import com.example.beer.data.model.BeerModel
 import com.example.beer.data.model.RatingModel
 import com.example.beer.data.model.TasteModel
+import com.example.beer.data.dao.RatingDao
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,15 +18,15 @@ interface BeerDao {
     @Delete
     suspend fun deleteBeer(beer: BeerModel)
 
-    @Query("SELECT * FROM beers ORDER BY name")
+    @Query("SELECT * FROM beers ORDER BY createdAt DESC")
     fun getAllBeers(): Flow<List<BeerModel>>
 
     @Transaction
     @Query("SELECT * FROM beers WHERE id = :id")
     suspend fun getBeerById(id: Int): BeerModel?
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertBeers(beers: List<BeerModel>): List<Long>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertBeers(beers: List<BeerModel>)
 
     @Upsert
     suspend fun upsertBeer(beer: BeerModel)
