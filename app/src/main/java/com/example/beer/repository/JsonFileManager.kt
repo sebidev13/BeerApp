@@ -11,6 +11,9 @@ import javax.inject.Singleton
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
+import android.net.Uri
+import com.example.beer.data.dto.BeerDto
+import com.example.beer.data.dto.toModel
 
 @Singleton
 class JsonFileManager @Inject constructor(
@@ -21,6 +24,40 @@ class JsonFileManager @Inject constructor(
         prettyPrint = true
         encodeDefaults = false
         explicitNulls = false
+        ignoreUnknownKeys = true
+    }
+
+    data class ImportResult(
+        val totalInFile: Int,
+        val inserted: Int,
+        val ignoredAsDuplicate: Int
+    )
+
+    suspend fun importBeersJson(uri: Uri): ImportResult {
+        val text = context.contentResolver.openInputStream(uri)
+            ?.bufferedReader(Charsets.UTF_8)
+            ?.use { it.readText() }
+            ?: error("Cannot open input stream for uri=$uri")
+
+        val dtos = json.decodeFromString<List<BeerDto>>(text)
+        val models = dtos.map { it.toModel() }
+
+        val batchSize = 50
+        var inserted = 0
+        var ignored = 0
+
+        models.chunked(batchSize).forEach { chunk ->
+            val result = beerDao.insertBeers(chunk)
+            val insertedInChunk = result.count { it != -1L }
+            inserted += insertedInChunk
+            ignored += (chunk.size - insertedInChunk)
+        }
+
+        return ImportResult(
+            totalInFile = models.size,
+            inserted = inserted,
+            ignoredAsDuplicate = ignored
+        )
     }
 
     suspend fun exportBeersJson(): android.net.Uri {
