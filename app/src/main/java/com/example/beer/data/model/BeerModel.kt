@@ -6,7 +6,11 @@ import java.io.Serializable
 
 @Entity(
     tableName = "beers",
-    indices = [Index("ratingId"), Index("tasteId")],
+    indices = [
+        Index("ratingId"),
+        Index("tasteId"),
+        Index(value =["name", "producer"], unique = true)
+    ],
     foreignKeys = [
         ForeignKey(
             entity = RatingModel::class,
@@ -32,5 +36,18 @@ data class BeerModel(
     val price: Double,
     val note: String?,
     val ratingId: Int?,
+    val tasteId: Int?
+) : Serializable
+
+data class BeerRatingModel(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val name: String,
+    val producer: String,
+    val alcoholPercentage: Double,
+    val type: BeerType,
+    val imageURI: String?,
+    val price: Double,
+    val note: String?,
+    val ratingId: RatingModel,
     val tasteId: Int?
 ) : Serializable
