@@ -2,6 +2,8 @@ package com.example.beer.data.dao
 
 import androidx.room.*
 import com.example.beer.data.model.BeerModel
+import com.example.beer.data.model.RatingModel
+import com.example.beer.data.model.TasteModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,4 +26,27 @@ interface BeerDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBeers(beers: List<BeerModel>)
+
+    @Upsert
+    suspend fun upsertBeer(beer: BeerModel)
+
+    @Upsert
+    suspend fun upsertRating(rating: RatingModel):Long
+
+    @Upsert
+    suspend fun upsertTaste(taste: TasteModel):Long
+
+    @Transaction
+    suspend fun addRating(beer: BeerModel, rating: RatingModel, taste: TasteModel) {
+        val newRatingId = upsertRating(rating)
+        val newTasteId = upsertTaste(taste)
+
+        // Note: Room's @Upsert returns the row ID if inserted, or -1/existing if updated
+        val beerToSave = beer.copy(
+            ratingId = if (newRatingId != -1L) newRatingId.toInt() else rating.id,
+            tasteId = if (newTasteId != -1L) newTasteId.toInt() else taste.id
+        )
+
+        upsertBeer(beerToSave)
+    }
 }
