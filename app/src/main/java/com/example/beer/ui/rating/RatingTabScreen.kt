@@ -1,11 +1,5 @@
 package com.example.beer.ui.rating
 
-import androidx.compose.runtime.Composable
-
-@Composable
-fun RatingTabScreen(viewModel: RatingTabViewModel) {
-}package com.example.beer.ui.rating
-
 import FilterBeerDialog
 import android.util.Log
 import androidx.compose.foundation.background
