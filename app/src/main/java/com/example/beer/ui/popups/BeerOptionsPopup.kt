@@ -11,64 +11,63 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 
-private const val TAG = "ConfirmationPopup"
+private const val TAG = "BeerOptionsPopup"
 
 @Composable
-fun ConfirmationPopup(
-    text: String,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit
+fun BeerOptionsPopup(
+    onDismiss: () -> Unit,
+    onEditBeer: () -> Unit,
+    onEditRating: () -> Unit,
+    onDeleteBeer: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = MaterialTheme.shapes.medium,
             color = Color.White,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
             Column(
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                Text(
-                    text = text,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 32.dp),
-                    color = Color.Black
-                )
+                TextButton(onClick = {
+                    Log.d(TAG, "Edit Beer option selected")
+                    onEditBeer()
+                }) {
+                    Text(
+                        text = "Edit Beer",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF0066CC)
+                    )
+                }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    TextButton(onClick = {
-                        Log.i(TAG, "User confirmed action: $text")
-                        onConfirm()
-                    }) {
-                        Text(
-                            text = "YES",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF0066CC)
-                        )
-                    }
+                TextButton(onClick = {
+                    Log.d(TAG, "Edit Rating option selected")
+                    onEditRating()
+                }) {
+                    Text(
+                        text = "Edit Rating",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF0066CC)
+                    )
+                }
 
-                    /**
-                     * Dismissing the popup typically resets the pending action state
-                     * in the parent screen without executing the logic.
-                     */
-                    TextButton(onClick = {
-                        Log.d(TAG, "User dismissed/canceled action: $text")
-                        onDismiss()
-                    }) {
-                        Text(
-                            text = "NO",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF0066CC)
-                        )
-                    }
+                /**
+                 * Delete action is typically followed by a secondary confirmation
+                 * dialog in the parent screen to prevent accidental data loss.
+                 */
+                TextButton(onClick = {
+                    Log.d(TAG, "Delete Beer option selected")
+                    onDeleteBeer()
+                }) {
+                    Text(
+                        text = "Delete Beer",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF0066CC)
+                    )
                 }
             }
         }
