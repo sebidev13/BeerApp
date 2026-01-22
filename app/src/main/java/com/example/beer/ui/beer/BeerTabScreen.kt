@@ -166,7 +166,10 @@ fun BeerTabScreen(viewModel: BeerTabViewModel) {
         AddRatingDialog(
             rating = selectedBeer?.rating,
             tasteModel = selectedBeer?.taste,
-            onDismiss = { showEditRatingDialog = false },
+            onDismiss = {
+                pendingCancelAction = { showEditRatingDialog = false }
+                showCancelConfirmation = true
+            },
             onSave = { rating, taste ->
                 Log.i(TAG, "Saving rating for beer: ${selectedBeer?.beer?.name}")
                 viewModel.addRating(selectedBeer!!.beer, rating, taste)

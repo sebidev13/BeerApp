@@ -67,7 +67,6 @@ fun RatingTabScreen(viewModel: RatingTabViewModel) {
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
 
     var showFilterDialog by remember { mutableStateOf(false) }
-    var showAddDialog by remember { mutableStateOf(false) }
     var showOptionsDialog by remember { mutableStateOf(false) }
     var showEditRatingDialog by remember { mutableStateOf(false) }
     var selectedBeer by remember { mutableStateOf<RatedBeer?>(null) }
@@ -157,7 +156,8 @@ fun RatingTabScreen(viewModel: RatingTabViewModel) {
             currentFilters,
             onDismiss = {
                 Log.d(TAG, "Filter dialog dismissed")
-                showFilterDialog = false
+                pendingCancelAction = { showFilterDialog = false }
+                showCancelConfirmation = true
             },
             onSearch = { minR, maxR, minT, maxT, minL, maxL, minD, maxD, aft, bit, mou, swe ->
                 Log.i(TAG, "Applying filters...")
@@ -173,17 +173,17 @@ fun RatingTabScreen(viewModel: RatingTabViewModel) {
         BeerOptionsPopup(
             onDismiss = { showOptionsDialog = false },
             onEditBeer = {
-                Log.d(TAG, "Option selected: Edit Beer")
+                Log.d(TAG, "Option: Edit Beer selected")
                 showOptionsDialog = false
                 showEditDialog = true
             },
             onEditRating = {
-                Log.d(TAG, "Option selected: Edit Rating")
+                Log.d(TAG, "Option: Edit Rating selected")
                 showOptionsDialog = false
                 showEditRatingDialog = true
             },
             onDeleteBeer = {
-                Log.d(TAG, "Option selected: Delete Beer")
+                Log.d(TAG, "Option: Delete Beer selected")
                 showOptionsDialog = false
                 showDeleteConfirmation = true
             }
@@ -194,15 +194,12 @@ fun RatingTabScreen(viewModel: RatingTabViewModel) {
         ConfirmationPopup(
             text = "Are you sure you want to delete?",
             onConfirm = {
-                Log.w(TAG, "Deleting beer: ${selectedBeer?.beer?.name}")
+                Log.i(TAG, "Deleting beer: ${selectedBeer?.beer?.name}")
                 selectedBeer?.let { viewModel.deleteBeer(it.beer) }
                 showDeleteConfirmation = false
                 selectedBeer = null
             },
-            onDismiss = {
-                Log.d(TAG, "Delete confirmation cancelled")
-                showDeleteConfirmation = false
-            }
+            onDismiss = { showDeleteConfirmation = false }
         )
     }
 
@@ -210,13 +207,12 @@ fun RatingTabScreen(viewModel: RatingTabViewModel) {
         AddBeerPopup(
             beerToEdit = selectedBeer?.beer,
             onDismiss = {
-                Log.d(TAG, "Edit dialog cancellation requested")
                 pendingCancelAction = { showEditDialog = false }
                 showCancelConfirmation = true
             },
             onSave = { updatedBeer ->
-                Log.i(TAG, "Updating beer details: ${updatedBeer.name}")
-                viewModel.addBeer(updatedBeer)
+                Log.i(TAG, "Updating beer: ${updatedBeer.name}")
+                viewModel.updateBeer(updatedBeer)
                 showEditDialog = false
             }
         )
@@ -226,28 +222,14 @@ fun RatingTabScreen(viewModel: RatingTabViewModel) {
         AddRatingDialog(
             rating = selectedBeer?.rating,
             tasteModel = selectedBeer?.taste,
-            onDismiss = { showEditRatingDialog = false },
-            onSave = { rating, taste ->
-                Log.i(TAG, "Saving rating update for: ${selectedBeer?.beer?.name}")
-                viewModel.addRating(
-                    selectedBeer!!.beer, rating, taste
-                )
-                showEditRatingDialog = false
-            }
-        )
-    }
-
-    if (showAddDialog) {
-        AddBeerPopup(
             onDismiss = {
-                Log.d(TAG, "Add dialog cancellation requested")
-                pendingCancelAction = { showAddDialog = false }
+                pendingCancelAction = { showEditRatingDialog = false }
                 showCancelConfirmation = true
             },
-            onSave = { newBeer ->
-                Log.i(TAG, "Saving new beer: ${newBeer.name}")
-                viewModel.addBeer(newBeer)
-                showAddDialog = false
+            onSave = { rating, taste ->
+                Log.i(TAG, "Saving rating for beer: ${selectedBeer?.beer?.name}")
+                viewModel.addRating(selectedBeer!!.beer, rating, taste)
+                showEditRatingDialog = false
             }
         )
     }
@@ -256,14 +238,11 @@ fun RatingTabScreen(viewModel: RatingTabViewModel) {
         ConfirmationPopup(
             text = "Are you sure you want to cancel?",
             onConfirm = {
-                Log.d(TAG, "Cancel confirmed via popup")
+                Log.d(TAG, "Cancel confirmed")
                 pendingCancelAction()
                 showCancelConfirmation = false
             },
-            onDismiss = {
-                Log.d(TAG, "Cancel confirmation dismissed (staying in dialog)")
-                showCancelConfirmation = false
-            }
+            onDismiss = { showCancelConfirmation = false }
         )
     }
 }

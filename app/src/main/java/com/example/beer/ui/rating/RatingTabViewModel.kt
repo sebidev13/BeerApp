@@ -133,7 +133,7 @@ class RatingTabViewModel @Inject constructor(
         }
     }
 
-    fun addBeer(beer: BeerModel) {
+    fun updateBeer(beer: BeerModel) {
         Log.i(TAG, "Upserting beer: ${beer.name} (ID: ${beer.id})")
         viewModelScope.launch(Dispatchers.IO) {
             beerRepository.upsertBeer(beer)
