@@ -17,13 +17,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -48,6 +51,7 @@ import com.example.beer.ui.popups.AddRatingDialog
 import com.example.beer.ui.popups.BeerOptionsPopup
 import com.example.beer.ui.popups.ConfirmationPopup
 import com.example.beer.ui.searchbar.CustomizableSearchBar
+import com.example.beer.ui.theme.beerAmber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -111,7 +115,11 @@ fun RatingTabScreen(viewModel: RatingTabViewModel) {
                     Log.d(TAG, "Filter dialog opened")
                     showFilterDialog = true
                 },
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(56.dp),
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = beerAmber,
+                    contentColor = Color.White
+                )
             ) {
                 Icon(
                     imageVector = Icons.Default.FilterList,
@@ -263,12 +271,10 @@ fun RatingTabScreen(viewModel: RatingTabViewModel) {
 @Composable
 fun BeerRatingItem(beer: BeerModel, rating: RatingModel) {
     val dateFormatter = remember { SimpleDateFormat("yyyy", Locale.getDefault()) }
-    val formattedYear = dateFormatter.format(Date(beer.createdAt))
 
-    // Card with 0 shape to match the full-width divider look in the mockup
-    Card(
+    Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(0)
+        color = Color.White
     ) {
         Column {
             Row(

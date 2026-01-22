@@ -32,42 +32,6 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun AttributeStringInputField(
-    label: String,
-    value: String,
-    onChange: (String) -> Unit,
-) {
-    var textState by remember(value) { mutableStateOf(value)}
-    Row(
-        modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(label, modifier = Modifier.weight(0.3f))
-        Column(modifier = Modifier.weight(0.7f),
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            BasicTextField(
-                value = textState,
-                onValueChange = {newValue ->
-                    textState = newValue
-                    onChange(newValue)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                textStyle = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Center),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-            )
-
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = Color.Gray
-            )
-        }
-    }
-}
-
-@Composable
 fun AttributeDoubleInputField(
     label: String,
     value: Double,
