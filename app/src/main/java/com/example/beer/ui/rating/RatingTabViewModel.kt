@@ -29,12 +29,12 @@ private const val TAG = "RatingTabViewModel"
 data class FilterState(
     val minRating: Double = 0.0,
     val maxRating: Double = 5.0,
-    val minTaste: Double = 0.0,
-    val maxTaste: Double = 5.0,
-    val minLook: Double = 0.0,
-    val maxLook: Double = 5.0,
-    val minDrinkability: Double = 0.0,
-    val maxDrinkability: Double = 5.0,
+    val minTaste: Int = 0,
+    val maxTaste: Int = 5,
+    val minLook: Int = 0,
+    val maxLook: Int = 5,
+    val minDrinkability: Int = 0,
+    val maxDrinkability: Int = 5,
     val aftertaste: Aftertaste? = null,
     val bitterness: Bitterness? = null,
     val mouthfeel: Mouthfeel? = null,
@@ -59,8 +59,8 @@ class RatingTabViewModel @Inject constructor(
     val filters = _filters.asStateFlow()
 
     fun applyFilters(
-        minRating: Double, maxRating: Double, minTaste: Double, maxTaste: Double,
-        minLook: Double, maxLook: Double, minDrinkability: Double, maxDrinkability: Double,
+        minRating: Double, maxRating: Double, minTaste: Int, maxTaste: Int,
+        minLook: Int, maxLook: Int, minDrinkability: Int, maxDrinkability: Int,
         aftertaste: Aftertaste?, bitterness: Bitterness?, mouthfeel: Mouthfeel?, sweetness: Sweetness?
     ) {
         Log.d(TAG, "Applying new filters: Rating[$minRating-$maxRating], Taste[$minTaste-$maxTaste]")
@@ -100,9 +100,9 @@ class RatingTabViewModel @Inject constructor(
 
             val matchesNumeric =
                 rating.overallRating?.let { it in f.minRating..f.maxRating } ?: true &&
-                        rating.taste?.let { it.toDouble() in f.minTaste..f.maxTaste } ?: true &&
-                        rating.look?.let { it.toDouble() in f.minLook..f.maxLook } ?: true &&
-                        rating.drinkability?.let { it.toDouble() in f.minDrinkability..f.maxDrinkability } ?: true
+                        rating.taste?.let { it in f.minTaste..f.maxTaste } ?: true &&
+                        rating.look?.let { it in f.minLook..f.maxLook } ?: true &&
+                        rating.drinkability?.let { it in f.minDrinkability..f.maxDrinkability } ?: true
 
             val matchesEnums =
                 (f.aftertaste == null || taste.aftertaste == f.aftertaste) &&

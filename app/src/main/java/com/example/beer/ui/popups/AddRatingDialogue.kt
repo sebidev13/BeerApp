@@ -55,10 +55,12 @@ fun AddRatingDialog(
             ) {
                 Text("Rating", style = MaterialTheme.typography.titleLarge)
 
-                AttributeDoubleInputField("Taste", taste.toDouble()) { taste = it.toInt() }
-                AttributeDoubleInputField("Look", look.toDouble()) { look = it.toInt() }
-                AttributeDoubleInputField("Drinkability", drinkability.toDouble()) { drinkability = it.toInt() }
-                AttributeDoubleInputField("Overall Rating", overallRating) { overallRating = it }
+                AttributeIntegerInputField("Taste", taste) { taste = it.toInt() }
+                AttributeIntegerInputField("Look", look) { look = it.toInt() }
+                AttributeIntegerInputField("Drinkability", drinkability) { drinkability = it.toInt() }
+                AttributeDoubleInputField("Overall Rating", overallRating) { overallRating =
+                    it as Double
+                }
 
                 Text("Taste", style = MaterialTheme.typography.titleMedium)
 
@@ -106,7 +108,7 @@ fun AddRatingDialog(
                     displayMapper = { it?.description ?: "None" }
                 )
 
-                AttributeStringInputField("Note", note) { note = it }
+                AttributeInput("Note", note, { note = it })
             }
         },
         confirmButton = {

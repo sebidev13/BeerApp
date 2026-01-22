@@ -24,7 +24,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -69,7 +71,7 @@ fun AttributeStringInputField(
 fun AttributeDoubleInputField(
     label: String,
     value: Double,
-    onChange: (Double) -> Unit,
+    onChange: (Number) -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -81,6 +83,30 @@ fun AttributeDoubleInputField(
         Row(verticalAlignment = Alignment.CenterVertically) {
             NumericUnderlinedInputField(
                 value = value,
+                isInteger = false,
+                onValueChange = onChange
+            )
+        }
+    }
+}
+
+@Composable
+fun AttributeIntegerInputField(
+    label: String,
+    value: Int,
+    onChange: (Number) -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(label, modifier = Modifier.weight(1f))
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            NumericUnderlinedInputField(
+                value = value,
+                isInteger = true,
                 onValueChange = onChange
             )
         }
@@ -148,25 +174,62 @@ fun <T : Enum<T>> EnumTasteDropDown(
 
 @Composable
 fun NumericUnderlinedInputField(
-    value: Double,
-    onValueChange: (Double) -> Unit
+    value: Number,
+    isInteger: Boolean,
+    onValueChange: (Number) -> Unit
 ) {
-    var textState by remember(value) { mutableStateOf(value.toString().replace(".", ",")) }
+    var textFieldState by remember(value) {
+        val initialText = if (isInteger) {
+            value.toInt().toString()
+        } else {
+            value.toDouble().toString().replace(".", ",")
+        }
+        mutableStateOf(
+            TextFieldValue(
+                text = initialText,
+                selection = TextRange(initialText.length)
+            )
+        )
+    }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         BasicTextField(
-            value = textState,
-            onValueChange = { newValue ->
-                val filteredValue = newValue.replace(".", ",")
-                textState = filteredValue
-                filteredValue.replace(",", ".").toDoubleOrNull()?.let { parsedDouble ->
-                    onValueChange(parsedDouble)
+            value = textFieldState,
+            onValueChange = { newState ->
+                val input = newState.text
+
+                if (isInteger) {
+                    // Integer Logic
+                    var filtered = input.filter { it.isDigit() }
+                    var parsed = filtered.toIntOrNull()
+                    if(parsed != null && parsed > 5){
+                        parsed = parsed % 10
+                        filtered = parsed.toString()
+                    }
+                    if (filtered.isEmpty() || (parsed != null && parsed in 0..5)) {
+                        textFieldState = newState.copy(text = filtered)
+                        parsed?.let { onValueChange(it) }
+                    }
+                } else {
+                    // Double Logic
+                    var formatted = input.replace(".", ",")
+                    var parsed = formatted.replace(",", ".").toDoubleOrNull()
+                    if(parsed != null && parsed > 5){
+                        parsed = parsed % 10
+                        formatted = parsed.toString().replace(".", ",")
+                    }
+                    if (formatted.isEmpty() || (parsed != null && parsed in 0.0..5.0)) {
+                        textFieldState = newState.copy(text = formatted)
+                        parsed?.let { onValueChange(it) }
+                    }
                 }
             },
             modifier = Modifier.width(45.dp),
             textStyle = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Center),
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            keyboardOptions = KeyboardOptions(
+                keyboardType = if (isInteger) KeyboardType.Number else KeyboardType.Decimal
+            )
         )
         HorizontalDivider(
             modifier = Modifier.width(45.dp),
@@ -175,3 +238,4 @@ fun NumericUnderlinedInputField(
         )
     }
 }
+

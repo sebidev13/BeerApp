@@ -12,6 +12,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,7 +33,7 @@ private const val TAG = "FilterBeerDialog"
 fun FilterBeerDialog(
     filters: FilterState,
     onDismiss: () -> Unit,
-    onSearch: (Double, Double, Double, Double, Double, Double, Double, Double, Aftertaste?, Bitterness?, Mouthfeel?, Sweetness?) -> Unit,
+    onSearch: (Double, Double, Int, Int, Int, Int, Int, Int, Aftertaste?, Bitterness?, Mouthfeel?, Sweetness?) -> Unit,
 ) {
     /**
      * We maintain internal mutable state for the dialog inputs.
@@ -41,12 +42,12 @@ fun FilterBeerDialog(
      */
     var minRating by remember { mutableDoubleStateOf(filters.minRating) }
     var maxRating by remember { mutableDoubleStateOf(filters.maxRating) }
-    var minTaste by remember { mutableDoubleStateOf(filters.minTaste) }
-    var maxTaste by remember { mutableDoubleStateOf(filters.maxTaste) }
-    var minLook by remember { mutableDoubleStateOf(filters.minLook) }
-    var maxLook by remember { mutableDoubleStateOf(filters.maxLook) }
-    var minDrinkability by remember { mutableDoubleStateOf(filters.minDrinkability) }
-    var maxDrinkability by remember { mutableDoubleStateOf(filters.maxDrinkability) }
+    var minTaste by remember { mutableIntStateOf(filters.minTaste) }
+    var maxTaste by remember { mutableIntStateOf(filters.maxTaste) }
+    var minLook by remember { mutableIntStateOf(filters.minLook) }
+    var maxLook by remember { mutableIntStateOf(filters.maxLook) }
+    var minDrinkability by remember { mutableIntStateOf(filters.minDrinkability) }
+    var maxDrinkability by remember { mutableIntStateOf(filters.maxDrinkability) }
 
 
     var selectedAftertaste by remember { mutableStateOf<Aftertaste?>(filters.aftertaste) }
@@ -60,17 +61,19 @@ fun FilterBeerDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 // Numeric Range Row: Rating
-                FilterRangeRow(label = "Rating", startValue = minRating, endValue = maxRating,
-                    onStartChange = { minRating = it }, onEndChange = { maxRating = it })
+                FilterRangeRow(label = "Rating", isInteger = false , startValue = minRating, endValue = maxRating,
+                    onStartChange = { minRating = it as Double }, onEndChange = { maxRating = it as Double })
 
-                FilterRangeRow(label = "Taste", startValue = minTaste, endValue = maxTaste,
-                    onStartChange = { minTaste = it }, onEndChange = { maxTaste = it })
+                FilterRangeRow(label = "Taste",isInteger = true , startValue = minTaste, endValue = maxTaste,
+                    onStartChange = { minTaste = it as Int }, onEndChange = { maxTaste = it as Int })
 
-                FilterRangeRow(label = "Look", startValue = minLook, endValue = maxLook,
-                    onStartChange = { minLook = it }, onEndChange = { maxLook = it })
+                FilterRangeRow(label = "Look",isInteger = true , startValue = minLook, endValue = maxLook,
+                    onStartChange = { minLook = it as Int }, onEndChange = { maxLook = it as Int })
 
-                FilterRangeRow(label = "Drinkability", startValue = minDrinkability, endValue = maxDrinkability,
-                    onStartChange = { minDrinkability = it }, onEndChange = { maxDrinkability = it })
+                FilterRangeRow(label = "Drinkability",isInteger = true , startValue = minDrinkability, endValue = maxDrinkability,
+                    onStartChange = { minDrinkability = it as Int }, onEndChange = { maxDrinkability =
+                        it as Int
+                    })
 
 
                 HorizontalDivider()
@@ -142,9 +145,9 @@ fun FilterBeerDialog(
                 TextButton(onClick = {
                     Log.d(TAG, "Filters reset to defaults")
                     minRating = 0.0; maxRating = 5.0
-                    minTaste = 0.0; maxTaste = 5.0
-                    minLook = 0.0; maxLook = 5.0
-                    minDrinkability = 0.0; maxDrinkability = 5.0
+                    minTaste = 0; maxTaste = 5
+                    minLook = 0; maxLook = 5
+                    minDrinkability = 0; maxDrinkability = 5
                     selectedAftertaste = null
                     selectedBitterness = null
                     selectedMouthfeel = null
@@ -163,10 +166,11 @@ fun FilterBeerDialog(
 @Composable
 fun FilterRangeRow(
     label: String,
-    startValue: Double,
-    endValue: Double,
-    onStartChange: (Double) -> Unit,
-    onEndChange: (Double) -> Unit
+    isInteger: Boolean,
+    startValue: Number,
+    endValue: Number,
+    onStartChange: (Number) -> Unit,
+    onEndChange: (Number) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -178,12 +182,14 @@ fun FilterRangeRow(
         Row(verticalAlignment = Alignment.CenterVertically) {
             NumericUnderlinedInputField(
                 value = startValue,
+                isInteger = isInteger,
                 onValueChange = onStartChange
             )
 
             Text(" - ", modifier = Modifier.padding(horizontal = 4.dp))
             NumericUnderlinedInputField(
                 value = endValue,
+                isInteger = isInteger,
                 onValueChange = onEndChange
             )
         }
